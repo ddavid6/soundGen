@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<!-- vim:sw=4:ts=4:et: 
+-->
+<html>
+<head>
+<meta name=viewport content="width=device-width">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+  <title>Frequency Sound Generator</title>
+<style type="text/css">
+<!--
+input.in {  background-color:#ddff33; }
+input.flat {  border-style:none; border-width:1px; }
+p.copy { margin-top: 8pt; 
+        font-family: serif;
+        font-weight: normal;
+        width: 95%;
+        font-size: 80%;
+        color: #888;
+}
+-->
+</style>
+<script type="text/javascript" language="JavaScript">
+<!--  to hide script contents from old browsers
+//--------------------------
+var oscillator;
+var oscillator_is_on=false;
+var fmin=2;
+var fmax=20000;
+function tone(freq,waveform){ // return true if tone can be generated
+    // create web audio api context
+    var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    if (! audioCtx) {
+        return(false);
+    }
+    // create Oscillator node
+    oscillator = audioCtx.createOscillator();
+
+    // value in hertz
+    oscillator.frequency.value= freq; // value in hertz
+    oscillator.type=waveform; // string
+    oscillator.connect(audioCtx.destination);
+    oscillator.start();
+    oscillator_is_on=true;
+    return(true);
+}
+function read_txt_input(cform){
+    var js_err_tag=document.getElementById("js_err"); // note js_err is only valid when the page has fully loaded
+    js_err_tag.firstChild.nodeValue =" ";
+    var tmp=cform.freq.value;
+    if (isNaN(tmp)){
+        js_err_tag.firstChild.nodeValue = 'Error: frequency is not a number';
+        return(fmin);
+    }
+    var freq = parseInt(tmp);
+    if (freq > fmax){
+        freq=fmax;
+    }
+    if (freq < fmin){
+        freq=fmin;
+    }
+    return(freq);
+}
+function chwform(cform){
+    if (oscillator_is_on){
+        oscillator.stop();
+        starttone(cform);
+    }
+}
+// just freq update via the text field
+function chtone(cform){
+    var freq = read_txt_input(cform);
+    cform.freq.value=freq;
+    cform.fslider.value=freq;
+    if (oscillator){
+        oscillator.frequency.value = freq;
+    }
+}
+function chslider(cform){
+    var tmp=cform.fslider.value;
+    var freq = parseInt(tmp);
+    cform.freq.value=freq;
+    if (oscillator){
+        oscillator.frequency.value = freq;
+    }
+}
+function stoptone(cform){
+    if (oscillator){
+        oscillator.stop();
+        oscillator_is_on=false;
+    }
+}
+function starttone(cform){
+    var freq=read_txt_input(cform);
+    cform.freq.value=freq;
+    cform.fslider.value=freq;
+    var waveform=cform.wform.value; 
+    if (oscillator){
+        oscillator.stop();
+        oscillator_is_on=false;
+    }
+    var apisupported = tone(freq,waveform);
+    if (! apisupported){
+        js_err_tag.firstChild.nodeValue = 'Error: your browser does not support the Web Audio API OscillatorNode';
+        return;
+    }
+}
+
+</script>
+</head>
+
+<body>
+    <h2>Frequency Sound Generator</h2>
+
+<form onsubmit="starttone(this);return false;" name="myform">
+<table>
+<tr><td>Frequency: </td><td><input name="freq" size="7" type="text" value="440" class="in" onchange="chtone(this.form)">Hz</td></tr>
+<tr><td>Wave form: </td><td><select size="1" name="wform" onchange="chwform(this.form)"><option value="sine">sine</option><option value="square">square</option><option value="sawtooth">sawtooth</option><option value="triangle">triangle</option></select></td></tr>
+</table>
+<br>
+<br>
+<input value=" start " type="submit">
+<input value=" stop " onclick="stoptone(this.form)" type="button"><br>
+<p id="js_err" style="color:#a00;">Please turn on JavaScript!</p>
+<br>
+Frequency slider:
+<br>
+  <input type="range" min="2" max="20000" value="440" step="1" name="fslider" oninput="chslider(this.form)" style="width:90%;">
+<br>
+
+</form>
+    </body>
+</html>
