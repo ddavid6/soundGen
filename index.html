@@ -116,7 +116,7 @@ function starttone(cform){
 
 <form onsubmit="starttone(this);return false;" name="myform">
 <table>
-<tr><td>Frequency: </td><td><input name="freq" size="7" type="text" value="20000" class="in" onchange="chtone(this.form)">Hz</td></tr>
+<tr><td>Frequency: </td><td><input name="freq" size="7" type="text" value="22500" class="in" onchange="chtone(this.form)">Hz</td></tr>
 <tr><td>Wave form: </td><td><select size="1" name="wform" onchange="chwform(this.form)"><option value="sine">sine</option><option value="square">square</option><option value="sawtooth">sawtooth</option><option value="triangle">triangle</option></select></td></tr>
 </table>
 <br>
@@ -127,7 +127,7 @@ function starttone(cform){
 <br>
 Frequency slider:
 <br>
-  <input type="range" min="10000" max="40000" value="20000" step="1" name="fslider" oninput="chslider(this.form)" style="width:90%;">
+  <input type="range" min="10000" max="40000" value="20000" step="1" name="fslider" oninput="chslider(this.form)" style="width:70%;">
 <br>
 
 </form>
