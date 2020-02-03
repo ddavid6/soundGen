@@ -22,12 +22,12 @@ p.copy { margin-top: 8pt;
 -->
 </style>
 <script type="text/javascript" language="JavaScript">
-<!--  to hide script contents from old browsers
+
 //--------------------------
 var oscillator;
 var oscillator_is_on=false;
-var fmin=2;
-var fmax=20000;
+var fmin=10000;
+var fmax=40000;
 function tone(freq,waveform){ // return true if tone can be generated
     // create web audio api context
     var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -127,7 +127,7 @@ function starttone(cform){
 <br>
 Frequency slider:
 <br>
-  <input type="range" min="2" max="20000" value="440" step="1" name="fslider" oninput="chslider(this.form)" style="width:90%;">
+  <input type="range" min="10000" max="40000" value="440" step="1" name="fslider" oninput="chslider(this.form)" style="width:90%;">
 <br>
 
 </form>
